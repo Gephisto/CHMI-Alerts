@@ -12,5 +12,7 @@ command_line:
         - severity
         - description
         - instructions
+        - count # pocet vsech platnych vystrah
+        - alerts # seznam vsech platnych vystrah
       value_template: "{{ value_json.event }}"
   

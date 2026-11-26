@@ -190,7 +190,7 @@ try:
 			'severityLevel': severity_int[alert_info['severity']],
 			'severity': severity_string[alert_info['severity']],
 			'description': alert_info['description'],
-			'instructions': alert_info['instruction']
+			'instructions': alert_info.get('instruction', '')
 		}
 		alerts.append(alert) # pridani vystrahy do seznamu vystrah
 
@@ -209,9 +209,14 @@ if (len(alerts) == 0):
 	alert = {
 		'cisorp': CISORP,
 		'event': "Žádná výstraha",
-		'severityLevel': 0
+		'severityLevel': 0,
+		'count': 0,
+		'alerts': []
 	}
 	print(json.dumps(alert)) # neni vystraha ("prazdne" hlaseni)
 else:
 	alerts.sort(key=lambda alert: alert['severityLevel'], reverse=True) # vyssi dulezitost nahore
-	print(json.dumps(alerts[0])) # pouze nejdulezitejsi vystraha
+	output = dict(alerts[0]) # nejdulezitejsi vystraha (puvodni format)
+	output['count'] = len(alerts) # pocet vsech platnych vystrah
+	output['alerts'] = alerts # seznam vsech platnych vystrah (serazeno podle dulezitosti)
+	print(json.dumps(output))
